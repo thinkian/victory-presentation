@@ -1,0 +1,26 @@
+.my-panel {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.my-panel-header,
+.my-panel-body {
+  padding: 1.875em;
+  border: 1px solid #d6d6d6;
+}
+
+.my-panel-header {
+  border-top: 4px solid #2b96f3;
+  border-bottom: 0;
+}
+
+.my-panel-heading {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+@media (min-width: 960px) {
+  .my-panel-heading {
+    font-size: 2em;
+  }
+}

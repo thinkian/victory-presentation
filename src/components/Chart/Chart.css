@@ -1,0 +1,42 @@
+.my-chart {
+  margin: 0 auto;
+}
+
+.my-tooltip-wrapper {
+  pointer-events: none;
+}
+
+.my-tooltip {
+  position: relative;
+  min-width: 120px;
+  min-height: 20px;
+  padding: 1em;
+  background-color: #fff;
+  border: 1px solid #d6d6d6;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.my-tooltip::before,
+.my-tooltip::after {
+  content: '';
+  position: absolute;
+  top: auto;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.my-tooltip::before {
+  bottom: -18px;
+  left: 62px;
+  border-width: 18px 18px 0 18px;
+  border-color: rgb(78, 78, 78, 0.15) transparent transparent transparent;
+}
+
+.my-tooltip::after {
+  bottom: -15px;
+  left: 65px;
+  border-width: 15px 15px 0 15px;
+  border-color: #fff transparent transparent transparent;
+}
