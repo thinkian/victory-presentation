@@ -1,7 +1,11 @@
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
+
+const IS_PROD = process.env.NODE_ENV === 'production';
 
 module.exports = {
   mode: 'development',
@@ -15,32 +19,37 @@ module.exports = {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader?cacheDirectory',
-          options: {
-            presets: ['env', 'react'],
-            plugins: [
-              'transform-class-properties',
-              'transform-object-rest-spread'
-            ]
-          }
-        }
+        loader: 'babel-loader'
       },
       {
         test: /\.css/,
         exclude: /node_modules/,
-        use: ['style-loader', 'css-loader']
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: !IS_PROD
+            }
+          },
+          'css-loader'
+        ]
       }
     ]
   },
   plugins: [
-    new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: './src/index.html'
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      ignoreOrder: false
     })
   ],
+  optimization: {
+    minimizer: [new TerserPlugin()]
+  },
   resolve: {
     modules: ['node_modules', path.resolve(__dirname, 'src')],
     extensions: ['.js', '.json', '.jsx', '.css']
