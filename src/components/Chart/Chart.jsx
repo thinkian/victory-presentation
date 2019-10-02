@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { VictoryAxis, VictoryBar, VictoryChart, VictoryTooltip } from 'victory';
 
+import ChartTooltip from './ChartTooltip';
 import './Chart.css';
 
 import MOCK_DATA from 'data/mock1';
@@ -56,7 +57,7 @@ class Chart extends Component {
           {this.axes}
           <VictoryBar
             data={this.data}
-            labelComponent={<VictoryTooltip />}
+            labelComponent={<ChartTooltip />}
             labels={({ datum }) => `$${datum.earnings}`}
             x="quarter"
             y="earnings"
