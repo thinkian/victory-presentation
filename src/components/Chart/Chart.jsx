@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import {
   VictoryAxis,
   VictoryLine,
+  VictoryGroup,
+  VictoryScatter,
   VictoryChart,
-  VictoryTooltip
+  VictoryVoronoiContainer
 } from 'victory';
 
 import ChartTooltip from './ChartTooltip';
@@ -14,8 +16,20 @@ import MOCK_DATA from 'data/mock2';
 
 class Chart extends Component {
   get axes() {
+    const xAxisStyle = {
+      ticks: {
+        size: 5,
+        stroke: 'black'
+      }
+    };
+
     return [
-      <VictoryAxis key="xAxis" scale="time" tickFormat={this.yFormat} />,
+      <VictoryAxis
+        key="xAxis"
+        scale="time"
+        style={xAxisStyle}
+        tickFormat={this.yFormat}
+      />,
       <VictoryAxis
         key="yAxis"
         dependentAxis
@@ -48,6 +62,14 @@ class Chart extends Component {
     }));
   }
 
+  get scatterStyle() {
+    return {
+      data: {
+        fill: 'darkseagreen'
+      }
+    };
+  }
+
   yFormat(d) {
     const date = new Date(d).toLocaleString('en-US', {
       month: 'long'
@@ -60,16 +82,19 @@ class Chart extends Component {
     return (
       <div className="my-chart">
         <VictoryChart
+          containerComponent={<VictoryVoronoiContainer />}
           domainPadding={20}
           height={200}
           padding={this.chartPadding}>
           {this.axes}
-          <VictoryLine
-            data={this.data}
-            x="date"
-            y="earnings"
-            style={this.lineStyle}
-          />
+          <VictoryGroup data={this.data} x="date" y="earnings">
+            <VictoryLine style={this.lineStyle} />
+            <VictoryScatter
+              labelComponent={<ChartTooltip />}
+              labels={({ datum }) => `$${datum.earnings}`}
+              style={this.scatterStyle}
+            />
+          </VictoryGroup>
         </VictoryChart>
       </div>
     );
