@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { VictoryAxis, VictoryBar, VictoryChart } from 'victory';
+import { VictoryAxis, VictoryBar, VictoryChart, VictoryTooltip } from 'victory';
 
 import './Chart.css';
 
@@ -56,6 +56,8 @@ class Chart extends Component {
           {this.axes}
           <VictoryBar
             data={this.data}
+            labelComponent={<VictoryTooltip />}
+            labels={({ datum }) => `$${datum.earnings}`}
             x="quarter"
             y="earnings"
             style={this.barStyle}
