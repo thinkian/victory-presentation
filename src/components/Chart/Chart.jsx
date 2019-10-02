@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
-import { VictoryAxis, VictoryBar, VictoryChart, VictoryTooltip } from 'victory';
+import {
+  VictoryAxis,
+  VictoryLine,
+  VictoryChart,
+  VictoryTooltip
+} from 'victory';
 
 import ChartTooltip from './ChartTooltip';
 import './Chart.css';
 
-import MOCK_DATA from 'data/mock1';
+// import MOCK_DATA from 'data/mock1';
+import MOCK_DATA from 'data/mock2';
 
 class Chart extends Component {
   get axes() {
     return [
-      <VictoryAxis
-        key="xAxis"
-        tickValues={this.xValues}
-        tickFormat={d => `Quarter ${d}`}
-      />,
+      <VictoryAxis key="xAxis" scale="time" tickFormat={this.yFormat} />,
       <VictoryAxis
         key="yAxis"
         dependentAxis
@@ -22,10 +24,10 @@ class Chart extends Component {
     ];
   }
 
-  get barStyle() {
+  get lineStyle() {
     return {
       data: {
-        fill: 'mediumseagreen'
+        stroke: 'mediumseagreen'
       }
     };
   }
@@ -33,18 +35,25 @@ class Chart extends Component {
   get chartPadding() {
     return {
       top: 0,
-      bottom: 25,
+      bottom: 35,
       left: 50,
       right: 50
     };
   }
 
   get data() {
-    return MOCK_DATA.data;
+    return MOCK_DATA.data.map(datum => ({
+      ...datum,
+      date: new Date(datum.date)
+    }));
   }
 
-  get xValues() {
-    return this.data.map(datum => datum.quarter);
+  yFormat(d) {
+    const date = new Date(d).toLocaleString('en-US', {
+      month: 'long'
+    });
+
+    return date;
   }
 
   render() {
@@ -55,13 +64,11 @@ class Chart extends Component {
           height={200}
           padding={this.chartPadding}>
           {this.axes}
-          <VictoryBar
+          <VictoryLine
             data={this.data}
-            labelComponent={<ChartTooltip />}
-            labels={({ datum }) => `$${datum.earnings}`}
-            x="quarter"
+            x="date"
             y="earnings"
-            style={this.barStyle}
+            style={this.lineStyle}
           />
         </VictoryChart>
       </div>
